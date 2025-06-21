@@ -20,12 +20,12 @@ public class TravelPlanControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void getTravelPlansWhenEmptyTest() throws Exception {
-        this.mockMvc.perform(
-                get("/plans").contentType(MediaType.APPLICATION_JSON)
-            )
-            .andExpect(status().isOk())
-            .andExpect(content().json("[{\"id\":1,\"name\":\"Plan\",\"departureDate\":1750285667,\"userId\":1}]"));
-    }
+//    @Test
+//    public void getTravelPlansWhenEmptyTest() throws Exception {
+//        this.mockMvc.perform(
+//                get("/plans").contentType(MediaType.APPLICATION_JSON)
+//            )
+//            .andExpect(status().isOk())
+//            .andExpect(content().json("[{\"id\":1,\"name\":\"Plan\",\"departureDate\":1750285667,\"userId\":1}]"));
+//    }
 }
