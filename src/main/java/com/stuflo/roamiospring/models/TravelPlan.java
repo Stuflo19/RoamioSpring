@@ -3,8 +3,10 @@ package com.stuflo.roamiospring.models;
 import com.stuflo.roamiospring.dtos.TravelPlanDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 public class TravelPlan {
     @Id
