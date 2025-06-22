@@ -1,7 +1,7 @@
 package com.stuflo.roamiospring.models.itineraryItems;
 
+import com.stuflo.roamiospring.dtos.itineraryItems.HotelDto;
 import com.stuflo.roamiospring.models.Itinerary;
-import com.stuflo.roamiospring.models.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -24,6 +24,19 @@ public class Hotel implements ItineraryItem {
     @ManyToOne
     @JoinColumn(name = "itinerary_id")
     private Itinerary itinerary;
+
+    public Hotel() {}
+
+    public Hotel(HotelDto hotelDto, Long itineraryId) {
+        Itinerary itinerary = new Itinerary();
+        itinerary.setId(itineraryId);
+
+        this.name = hotelDto.getName();
+        this.bookingReference = hotelDto.getBookingReference();
+        this.checkIn = hotelDto.getCheckIn();
+        this.checkOut = hotelDto.getCheckOut();
+        this.itinerary = itinerary;
+    }
 
     @Override
     public Long getItemTime() {
