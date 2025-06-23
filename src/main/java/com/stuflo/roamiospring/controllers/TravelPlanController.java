@@ -3,26 +3,38 @@ package com.stuflo.roamiospring.controllers;
 import com.stuflo.roamiospring.dtos.TravelPlanDto;
 import com.stuflo.roamiospring.models.User;
 import com.stuflo.roamiospring.responses.TravelPlanResponse;
+import com.stuflo.roamiospring.services.AuthenticationService;
 import com.stuflo.roamiospring.services.TravelPlanService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/plans")
 public class TravelPlanController {
     private final TravelPlanService service;
+    private final AuthenticationService authenticationService;
 
-    public TravelPlanController(TravelPlanService travelPlanService) {
+    public TravelPlanController(TravelPlanService travelPlanService, AuthenticationService authenticationService) {
         this.service = travelPlanService;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping
-    ResponseEntity<List<TravelPlanResponse>> readTravelPlan(@AuthenticationPrincipal User user) {
-        List<TravelPlanResponse> travelPlans = service.findAll(user.getId());
+    ResponseEntity<List<TravelPlanResponse>> readTravelPlan() {
+        Optional<User> user = authenticationService.getAuthenticatedUser();
+
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<TravelPlanResponse> travelPlans = service.findAll(user.get().getId());
 
         return ResponseEntity.ok(travelPlans);
     }

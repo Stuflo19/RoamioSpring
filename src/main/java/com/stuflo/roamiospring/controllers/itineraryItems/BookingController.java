@@ -6,12 +6,14 @@ import com.stuflo.roamiospring.responses.itineraryItems.BookingResponse;
 import com.stuflo.roamiospring.services.itineraryItems.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/plans/{planId}/itineraries/{itineraryId}/bookings")
 public class BookingController {
     private final BookingService bookingService;

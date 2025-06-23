@@ -1,18 +1,20 @@
 package com.stuflo.roamiospring.controllers;
 
-import com.stuflo.roamiospring.models.User;
 import com.stuflo.roamiospring.dtos.LoginUserDto;
 import com.stuflo.roamiospring.dtos.RegisterUserDto;
+import com.stuflo.roamiospring.models.User;
 import com.stuflo.roamiospring.responses.LoginResponse;
 import com.stuflo.roamiospring.services.AuthenticationService;
 import com.stuflo.roamiospring.services.JwtService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/auth")
+@PreAuthorize("isAuthenticated()")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
