@@ -16,8 +16,8 @@ public class FlightService {
         this.flightRepository = flightRepository;
     }
 
-    public List<FlightResponse> getFlights(Long itineraryId) {
-        List<Flight> flights = flightRepository.findAllByItineraryId(itineraryId);
+    public List<FlightResponse> getFlights(Long itineraryId, Long userId) {
+        List<Flight> flights = flightRepository.findAllByItineraryIdAndUserId(itineraryId, userId);
 
         return flights.stream().map(FlightResponse::new).toList();
     }

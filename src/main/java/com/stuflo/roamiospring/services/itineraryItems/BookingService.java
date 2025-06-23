@@ -16,8 +16,8 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public List<BookingResponse> getBookings(Long itineraryId) {
-        List<Booking> bookings = bookingRepository.findAllByItineraryId(itineraryId);
+    public List<BookingResponse> getBookings(Long itineraryId, Long userId) {
+        List<Booking> bookings = bookingRepository.findAllByItineraryIdAndUserId(itineraryId, userId);
 
         return bookings.stream().map(BookingResponse::new).toList();
     }

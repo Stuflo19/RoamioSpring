@@ -1,10 +1,12 @@
 package com.stuflo.roamiospring.controllers.itineraryItems;
 
 import com.stuflo.roamiospring.dtos.itineraryItems.HotelDto;
+import com.stuflo.roamiospring.models.User;
 import com.stuflo.roamiospring.responses.itineraryItems.HotelResponse;
 import com.stuflo.roamiospring.services.itineraryItems.HotelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,8 @@ public class HotelController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HotelResponse>> GetHotels(@PathVariable Long planId, @PathVariable Long itineraryId) {
-        return ResponseEntity.ok(hotelService.getHotels(itineraryId));
+    public ResponseEntity<List<HotelResponse>> GetHotels(@PathVariable Long planId, @PathVariable Long itineraryId, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(hotelService.getHotels(itineraryId, user.getId()));
     }
 
     @PostMapping

@@ -16,8 +16,8 @@ public class ItineraryService {
         this.itineraryRepository = itineraryRepository;
     }
 
-    public List<ItineraryResponse> getItineraries(Long planId) {
-        List<Itinerary> itineraries = itineraryRepository.findAllByTravelPlanId(planId);
+    public List<ItineraryResponse> getItineraries(Long planId, Long userId) {
+        List<Itinerary> itineraries = itineraryRepository.findAllByTravelPlanIdAndUserId(planId, userId);
 
         return itineraries.stream().map(ItineraryResponse::new).toList();
     }

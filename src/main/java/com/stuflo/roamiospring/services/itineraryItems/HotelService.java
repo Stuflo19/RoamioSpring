@@ -16,8 +16,8 @@ public class HotelService {
         this.hotelRepository = hotelRepository;
     }
 
-    public List<HotelResponse> getHotels(Long itineraryId) {
-        List<Hotel> hotels = hotelRepository.findAllByItineraryId(itineraryId);
+    public List<HotelResponse> getHotels(Long itineraryId, Long userId) {
+        List<Hotel> hotels = hotelRepository.findAllByItineraryIdAndUserId(itineraryId, userId);
 
         return hotels.stream().map(HotelResponse::new).toList();
     }

@@ -1,6 +1,7 @@
 package com.stuflo.roamiospring.controllers;
 
 import com.stuflo.roamiospring.dtos.ItineraryDto;
+import com.stuflo.roamiospring.models.User;
 import com.stuflo.roamiospring.responses.ItineraryResponse;
 import com.stuflo.roamiospring.responses.itineraryItems.AllItemsResponse;
 import com.stuflo.roamiospring.responses.itineraryItems.BookingResponse;
@@ -12,6 +13,7 @@ import com.stuflo.roamiospring.services.itineraryItems.FlightService;
 import com.stuflo.roamiospring.services.itineraryItems.HotelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,16 +34,16 @@ public class ItineraryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ItineraryResponse>> getItineraries(@PathVariable Long planId) {
+    public ResponseEntity<List<ItineraryResponse>> getItineraries(@PathVariable Long planId, @AuthenticationPrincipal User user) {
         return ResponseEntity
-                .ok(itineraryService.getItineraries(planId));
+                .ok(itineraryService.getItineraries(planId, user.getId()));
     }
 
     @GetMapping("/{itineraryId}/allItems")
-    public ResponseEntity<AllItemsResponse> getAllItineraryItems(@PathVariable Long planId, @PathVariable Long itineraryId) {
-        List<HotelResponse> hotels = hotelService.getHotels(itineraryId);
-        List<FlightResponse> flights = flightService.getFlights(itineraryId);
-        List<BookingResponse> bookings = bookingService.getBookings(itineraryId);
+    public ResponseEntity<AllItemsResponse> getAllItineraryItems(@PathVariable Long planId, @PathVariable Long itineraryId, @AuthenticationPrincipal User user) {
+        List<HotelResponse> hotels = hotelService.getHotels(itineraryId, user.getId());
+        List<FlightResponse> flights = flightService.getFlights(itineraryId, user.getId());
+        List<BookingResponse> bookings = bookingService.getBookings(itineraryId, user.getId());
 
         return ResponseEntity.ok(new AllItemsResponse(bookings, hotels, flights));
     }
