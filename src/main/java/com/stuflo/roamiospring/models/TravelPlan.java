@@ -17,12 +17,13 @@ public class TravelPlan {
 
     private Long departureDate;
 
-//    private Long userId;
+    //    private Long userId;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public TravelPlan() {}
+    public TravelPlan() {
+    }
 
     public TravelPlan(String name, Long departureDate, User user) {
         this.name = name;
@@ -30,22 +31,29 @@ public class TravelPlan {
         this.user = user;
     }
 
-    public TravelPlan(TravelPlanDto travelPlanDto) {
+    public TravelPlan(TravelPlanDto travelPlanDto, Long userId) {
         User emptyUser = new User();
-        emptyUser.setId(travelPlanDto.getUserId());
+        emptyUser.setId(userId);
 
         this.name = travelPlanDto.getName();
         this.departureDate = travelPlanDto.getDepartureDate();
         this.user = emptyUser;
     }
 
-    public TravelPlan(TravelPlanDto travelPlanDto, Long id) {
+    public TravelPlan(TravelPlanDto travelPlanDto, Long userId, Long id) {
         User emptyUser = new User();
-        emptyUser.setId(travelPlanDto.getUserId());
+        emptyUser.setId(userId);
 
         this.name = travelPlanDto.getName();
         this.departureDate = travelPlanDto.getDepartureDate();
         this.user = emptyUser;
         this.id = id;
+    }
+
+    public TravelPlan updateTravelPlan(TravelPlanDto newTravelPlan) {
+        this.name = newTravelPlan.getName();
+        this.departureDate = newTravelPlan.getDepartureDate();
+
+        return this;
     }
 }

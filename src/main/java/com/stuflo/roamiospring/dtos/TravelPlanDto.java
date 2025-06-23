@@ -9,6 +9,4 @@ public class TravelPlanDto {
     private String name;
 
     private Long departureDate;
-
-    private Long userId;
 }
