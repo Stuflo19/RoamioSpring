@@ -5,10 +5,10 @@ import com.stuflo.roamiospring.models.User;
 import com.stuflo.roamiospring.responses.TravelPlanResponse;
 import com.stuflo.roamiospring.services.AuthenticationService;
 import com.stuflo.roamiospring.services.TravelPlanService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,8 +40,14 @@ public class TravelPlanController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<TravelPlanResponse> readTravelPlanById(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        TravelPlanResponse travelPlan = service.findById(user.getId(), id);
+    ResponseEntity<TravelPlanResponse> readTravelPlanById(@PathVariable Long id) {
+        Optional<User> user = authenticationService.getAuthenticatedUser();
+
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        TravelPlanResponse travelPlan = service.findById(user.get().getId(), id);
 
         if (travelPlan == null) {
             return ResponseEntity.notFound().build();
@@ -51,9 +57,15 @@ public class TravelPlanController {
     }
 
     @PostMapping
-    ResponseEntity<TravelPlanResponse> createTravelPlan(@RequestBody TravelPlanDto travelPlan, @AuthenticationPrincipal User user) {
+    ResponseEntity<TravelPlanResponse> createTravelPlan(@Valid @RequestBody TravelPlanDto travelPlan) {
         try {
-            TravelPlanResponse createdPlan = service.createTravelPlan(travelPlan, user.getId());
+            Optional<User> user = authenticationService.getAuthenticatedUser();
+
+            if (user.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            TravelPlanResponse createdPlan = service.createTravelPlan(travelPlan, user.get().getId());
 
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPlan);
         } catch (Exception e) {
@@ -62,8 +74,16 @@ public class TravelPlanController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<TravelPlanResponse> updateTravelPlan(@RequestBody TravelPlanDto travelPlan, @PathVariable Long id, @AuthenticationPrincipal User user) {
-        TravelPlanResponse updatedPlan = service.updateTravelPlan(travelPlan, user.getId(), id);
+    ResponseEntity<TravelPlanResponse> updateTravelPlan(@RequestBody TravelPlanDto travelPlan, @PathVariable Long id) {
+        Optional<User> user = authenticationService.getAuthenticatedUser();
+
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } else if (travelPlan.getName() == null && travelPlan.getDepartureDate() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        TravelPlanResponse updatedPlan = service.updateTravelPlan(travelPlan, user.get().getId(), id);
 
         if (updatedPlan == null) {
             return ResponseEntity.notFound().build();
@@ -73,8 +93,14 @@ public class TravelPlanController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> deleteTravelPlan(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        TravelPlanResponse tp = service.findById(user.getId(), id);
+    ResponseEntity<Void> deleteTravelPlan(@PathVariable Long id) {
+        Optional<User> user = authenticationService.getAuthenticatedUser();
+
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        TravelPlanResponse tp = service.findById(user.get().getId(), id);
 
         if (tp == null) {
             return ResponseEntity.notFound().build();
