@@ -10,7 +10,7 @@ import lombok.Getter;
 @Table(name = "flights")
 public class Flight implements ItineraryItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 public class TravelPlan {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -51,8 +51,13 @@ public class TravelPlan {
     }
 
     public TravelPlan updateTravelPlan(TravelPlanDto newTravelPlan) {
-        this.name = newTravelPlan.getName();
-        this.departureDate = newTravelPlan.getDepartureDate();
+        if (newTravelPlan.getName() != null && !newTravelPlan.getName().isEmpty()) {
+            this.name = newTravelPlan.getName();
+        }
+
+        if (newTravelPlan.getDepartureDate() != null) {
+            this.departureDate = newTravelPlan.getDepartureDate();
+        }
 
         return this;
     }

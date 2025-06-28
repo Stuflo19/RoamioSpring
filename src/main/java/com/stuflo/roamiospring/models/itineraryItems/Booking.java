@@ -10,7 +10,7 @@ import lombok.Getter;
 @Table(name = "bookings")
 public class Booking implements ItineraryItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -23,7 +23,8 @@ public class Booking implements ItineraryItem {
     @JoinColumn(name = "itinerary_id")
     private Itinerary itinerary;
 
-    public Booking() {}
+    public Booking() {
+    }
 
     public Booking(BookingDto bookingDto, Long itineraryId) {
         Itinerary itinerary = new Itinerary();

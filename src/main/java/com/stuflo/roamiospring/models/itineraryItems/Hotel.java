@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public class Hotel implements ItineraryItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -25,7 +25,8 @@ public class Hotel implements ItineraryItem {
     @JoinColumn(name = "itinerary_id")
     private Itinerary itinerary;
 
-    public Hotel() {}
+    public Hotel() {
+    }
 
     public Hotel(HotelDto hotelDto, Long itineraryId) {
         Itinerary itinerary = new Itinerary();
